@@ -7,29 +7,27 @@ class dinic
   private:
     int n, m, s, t;
     int cnt = 1;
-    int head[100005], d[100005], q[100005];
-    int now[100005]; // now[i]表示i点的当前弧
+    vector<int> head;
+    vector<int> d;
+    vector<int> q;
+    vector<int> now; // now[i]表示i点的当前弧
     struct Edge
     {
         ll t, next, w;
-    } edge[200005];
+    };
+    vector<Edge> edge;
 
   public:
     dinic(int n, int m, int s, int t)
-    {
-        this->n = n;
-        this->m = m;
-        this->s = s;
-        this->t = t;
-    };
+        : n(n), m(m), s(s), t(t), head(n + 5), d(n + 5), q(n + 5), now(n + 5), edge(2 * m + 5){};
     bool makelevel(int s, int t)
     {
-        memset(d, 0, sizeof d); // 清空深度数组
-        memset(q, 0, sizeof q); // 清空人工队列
-        d[s] = 1;               // 源点深度为1
-        int l = 0, r = 0;       // 人工队列的头尾指针
-        q[r++] = s;             // 将源点加入队列
-        now[s] = head[s];       // 源点的当前弧为head[s]
+        fill(d.begin(), d.end(), 0);
+        fill(q.begin(), q.end(), 0);
+        d[s] = 1;         // 源点深度为1
+        int l = 0, r = 0; // 人工队列的头尾指针
+        q[r++] = s;       // 将源点加入队列
+        now[s] = head[s]; // 源点的当前弧为head[s]
         while (l < r)
         {
             int x = q[l++]; // 取出队首元素
@@ -58,7 +56,8 @@ class dinic
             now[x] = i;                                          // 更新当前弧
             if ((edge[i].w != 0) and (d[edge[i].t] == d[x] + 1)) // 如果该边的残量不为0且该边的终点深度为x的深度+1
             {
-                ll tmp = dfs(edge[i].t, t, min(flow - sum, edge[i].w)); // 一路搜索下去，直到到达汇点或者流量为0，得到路径上的最小残量
+                ll tmp = dfs(edge[i].t, t,
+                             min(flow - sum, edge[i].w)); // 一路搜索下去，直到到达汇点或者流量为0，得到路径上的最小残量
                 edge[i].w -= tmp;     // 正向边减去流量
                 edge[i ^ 1].w += tmp; // 反向边加上流量
                 sum += tmp;

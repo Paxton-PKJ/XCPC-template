@@ -1,4 +1,4 @@
-![logo](images/logo.png)
+![logo](https://en.gravatar.com/userimage/223033497/9a8483f2c54a0d1a4dd8a697b8af07dc.jpeg?size=200)
 
 # XCPC-template
 
